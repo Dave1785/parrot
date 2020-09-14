@@ -1,4 +1,6 @@
-package com.examen.parrot.ui.login
+package com.examen.parrot.domain.login
+
+import com.examen.parrot.domain.login.LoggedInUserView
 
 /**
  * Authentication result : success (user details) or error message.

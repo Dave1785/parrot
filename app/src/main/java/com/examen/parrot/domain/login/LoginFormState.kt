@@ -1,4 +1,4 @@
-package com.examen.parrot.ui.login
+package com.examen.parrot.domain.login
 
 /**
  * Data validation state of the login form.

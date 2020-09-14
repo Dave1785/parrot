@@ -5,9 +5,12 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import android.util.Patterns
 import com.examen.parrot.data.LoginRepository
-import com.examen.parrot.data.Result
+import com.examen.parrot.domain.login.Result
 
 import com.examen.parrot.R
+import com.examen.parrot.domain.login.LoggedInUserView
+import com.examen.parrot.domain.login.LoginFormState
+import com.examen.parrot.domain.login.LoginResult
 
 class LoginViewModel(private val loginRepository: LoginRepository) : ViewModel() {
 

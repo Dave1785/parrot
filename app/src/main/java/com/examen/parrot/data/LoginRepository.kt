@@ -1,6 +1,7 @@
 package com.examen.parrot.data
 
-import com.examen.parrot.data.model.LoggedInUser
+import com.examen.parrot.domain.login.LoggedInUser
+import com.examen.parrot.domain.login.Result
 
 /**
  * Class that requests authentication and user information from the remote data source and

@@ -1,4 +1,4 @@
-package com.examen.parrot.ui.login
+package com.examen.parrot.domain.login
 
 /**
  * User details post authentication that is exposed to the UI

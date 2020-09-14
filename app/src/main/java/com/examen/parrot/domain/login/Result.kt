@@ -1,4 +1,4 @@
-package com.examen.parrot.data
+package com.examen.parrot.domain.login
 
 /**
  * A generic class that holds a value with its loading status.

@@ -16,6 +16,7 @@ import android.widget.ProgressBar
 import android.widget.Toast
 
 import com.examen.parrot.R
+import com.examen.parrot.domain.login.LoggedInUserView
 
 class LoginActivity : AppCompatActivity() {
 

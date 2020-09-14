@@ -1,4 +1,4 @@
-package com.examen.parrot.data.model
+package com.examen.parrot.domain.login
 
 /**
  * Data class that captures user information for logged in users retrieved from LoginRepository
