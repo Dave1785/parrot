@@ -1,6 +1,6 @@
 package com.examen.parrot.usercases
 
-import com.examen.parrot.data.LoginRepository
+import com.examen.parrot.data.login.LoginRepository
 
 class Login(val loginRepository: LoginRepository) {
 
