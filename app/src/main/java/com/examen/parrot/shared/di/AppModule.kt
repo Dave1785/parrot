@@ -1,7 +1,9 @@
 package com.examen.parrot.shared.di
 
+import android.content.Context
 import com.examen.parrot.login.data.LoginService
 import com.examen.parrot.stores.data.StoreService
+import com.examen.parrot.stores.framework.StoreDataBase
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -9,6 +11,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
+import dagger.hilt.android.qualifiers.ApplicationContext
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
@@ -40,8 +43,6 @@ object AppModule {
 
     @Provides
     fun provideStoreService(retrofit: Retrofit): StoreService =retrofit.create(StoreService::class.java)
-
-
 
 
 }
