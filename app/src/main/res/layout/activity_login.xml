@@ -31,7 +31,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="100dp"
                 android:layout_marginBottom="5dp"
-                app:srcCompat="@drawable/carrot" />
+                app:srcCompat="@drawable/parrot" />
 
 
             <com.google.android.material.textfield.TextInputLayout
@@ -104,35 +104,9 @@
         android:visibilityBoolean="@{data.loader}"
         layout="@layout/loading_view" />
 
-    <LinearLayout
+    <include
         android:id="@+id/message"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-
-        android:layout_gravity="bottom"
-        android:layout_marginLeft="5dp"
-        android:layout_marginRight="5dp"
-        android:layout_marginBottom="-50dp"
-        android:background="@drawable/background_edit_text"
-        android:orientation="horizontal">
-
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:padding="5dp"
-            app:srcCompat="@drawable/carrot" />
-
-        <TextView
-            android:id="@+id/message_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="Usuario o Contraseña incorrectas"
-            android:textColor="@color/primaryTextColor"
-            android:textStyle="bold" />
-    </LinearLayout>
+        layout="@layout/message" />
 
 </FrameLayout>
 

@@ -1,22 +1,21 @@
 package com.examen.parrot.stores.data
 
-import android.util.Log
-import com.examen.parrot.stores.domain.ResponseStore
-import com.examen.parrot.stores.source.StoreSource
+import com.examen.parrot.stores.framework.Store
+import com.examen.parrot.stores.framework.StoreDao
+import com.examen.parrot.stores.source.StoreRemoteSource
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class StoreRepository @Inject constructor(private val storeSource: StoreSource){
+class StoreRepository @Inject constructor(private val storeSource: StoreRemoteSource){
 
-    suspend fun getStores(token:String):ResponseStore?{
-        var responseStore:ResponseStore?=null
-        try {
-            storeSource.getStores(token)
-        }catch (e:Exception){
-            Log.d("Exception","Exception $e")
-        }
-        return responseStore
+    suspend fun getStores(token:String):List<Store>?{
+        var response: List<Store>?
+
+        response= storeSource.getStoresAsync(token)?.result?.stores
+
+
+       return response
     }
 
 }

@@ -6,20 +6,18 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 
 
-@Database(entities = [ParrotEntity::class],version = 1,exportSchema = false)
-abstract class ParrotDataBase : RoomDatabase() {
+@Database(entities = [Store::class],version = 1,exportSchema = false)
+abstract class StoreDataBase : RoomDatabase() {
 
-    abstract fun dao(): ParrotDao
-
+    abstract fun parrotDao(): StoreDao
 
     companion object {
 
         @Volatile
-        private  var INSTANCE: ParrotDataBase?=null
+        private  var INSTANCE: StoreDataBase?=null
 
 
-
-        fun getDatabase(context: Context): ParrotDataBase {
+        fun getDatabase(context: Context): StoreDataBase {
             val tempInstance = INSTANCE
             if (tempInstance != null) {
                 return tempInstance
@@ -27,8 +25,8 @@ abstract class ParrotDataBase : RoomDatabase() {
             synchronized(this) {
                 val instance = Room.databaseBuilder(
                     context.applicationContext,
-                    ParrotDataBase::class.java,
-                    "word_database"
+                    StoreDataBase::class.java,
+                    "store_database"
                 ).build()
                 INSTANCE = instance
                 return instance

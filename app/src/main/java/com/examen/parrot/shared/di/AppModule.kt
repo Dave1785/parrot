@@ -1,6 +1,7 @@
-package com.examen.parrot.di
+package com.examen.parrot.shared.di
 
 import com.examen.parrot.login.data.LoginService
+import com.examen.parrot.stores.data.StoreService
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -38,6 +39,9 @@ object AppModule {
     fun provideLoginService(retrofit: Retrofit): LoginService =retrofit.create(LoginService::class.java)
 
     @Provides
-    fun provideStoreService(retrofit: Retrofit): LoginService =retrofit.create(LoginService::class.java)
+    fun provideStoreService(retrofit: Retrofit): StoreService =retrofit.create(StoreService::class.java)
+
+
+
 
 }

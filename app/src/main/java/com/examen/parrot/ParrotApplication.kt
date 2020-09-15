@@ -1,7 +1,7 @@
-package com.examen.parrot.application
+package com.examen.parrot
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
-open class ParrotApplication : Application()
+ class ParrotApplication : Application()

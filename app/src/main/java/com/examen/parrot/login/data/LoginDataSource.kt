@@ -8,7 +8,7 @@ import kotlinx.coroutines.Deferred
  */
 interface LoginDataSource {
 
-    suspend fun login(username: String, password: String): Deferred<ResponseLogin>
+    suspend fun loginAsync(username: String, password: String): Deferred<ResponseLogin>
     suspend fun logout()
     fun getToken():String
 

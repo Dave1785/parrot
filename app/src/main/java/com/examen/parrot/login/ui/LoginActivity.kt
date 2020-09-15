@@ -49,8 +49,9 @@ class LoginActivity : AppCompatActivity() {
                 UserPreferences.getInstance(this).saveUser(it)
                 val intent=Intent(this, MainActivity::class.java)
                 startActivity(intent)
+                finish()
             }else{
-                showMessage(true,binding.message)
+                showMessage(true,binding.message.root)
             }
         })
     }

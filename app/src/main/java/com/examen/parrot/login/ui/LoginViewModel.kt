@@ -16,7 +16,6 @@ import kotlinx.coroutines.launch
 
 class LoginViewModel @ViewModelInject constructor(private val login:Login) : ViewModel() {
 
-
     //Data
     private var _authenticate= MutableLiveData<ResponseLogin>()
     val authenticate :LiveData<ResponseLogin>
