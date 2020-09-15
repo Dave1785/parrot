@@ -6,7 +6,7 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.login.categories.MainActivity">
+    tools:context=".stores.ui.MainActivity">
 
     <ExpandableListView
         android:id="@+id/categories_rv"
