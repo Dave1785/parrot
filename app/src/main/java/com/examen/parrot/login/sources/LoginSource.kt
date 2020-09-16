@@ -10,8 +10,8 @@ import javax.inject.Inject
 
 class LoginSource @Inject constructor(val loginService: LoginService) : LoginDataSource {
 
-    override suspend fun loginAsync(username: String, password: String): Deferred<ResponseLogin> {
-       return loginService.doLogin(LoginRequestDTO(username,password))
+    override suspend fun loginAsync(loginRequestDTO: LoginRequestDTO):ResponseLogin {
+       return loginService.doLogin(loginRequestDTO).await()
     }
 
     override suspend fun logout() {

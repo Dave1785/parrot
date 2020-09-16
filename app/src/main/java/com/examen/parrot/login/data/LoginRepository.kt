@@ -18,7 +18,7 @@ class LoginRepository @Inject constructor(private val loginSource: LoginSource) 
     suspend fun doLogin(requestDTO: LoginRequestDTO): ResponseLogin?{
         var responseLogin: ResponseLogin?=null
         try{
-           responseLogin= loginSource.loginService.doLogin(requestDTO).await()
+           responseLogin= loginSource.loginAsync(requestDTO)
         }catch (e:Exception){
             Log.d("Fail","Fail")
         }
