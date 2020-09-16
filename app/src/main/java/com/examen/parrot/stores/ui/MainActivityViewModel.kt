@@ -1,5 +1,6 @@
 package com.examen.parrot.stores.ui
 
+import android.util.Log
 import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -29,8 +30,7 @@ class MainActivityViewModel @ViewModelInject constructor(private val stores: Get
     fun getStores(token:String){
         showLoading(true)
         viewModelScope.launch {
-         val storeList= stores.getStores("Bearer $token")
-          _storesList.value= getData(storeList)
+          Log.d("","")
         }
     }
 

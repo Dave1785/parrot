@@ -1,6 +1,7 @@
 package com.examen.parrot.login.ui
 
 import android.animation.ObjectAnimator
+import android.content.Context
 import android.content.Intent
 import androidx.lifecycle.Observer
 import android.os.Bundle
@@ -9,12 +10,18 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
+import androidx.work.Constraints
+import androidx.work.OneTimeWorkRequestBuilder
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import com.examen.parrot.R
 import com.examen.parrot.databinding.ActivityLoginBinding
 import com.examen.parrot.stores.ui.MainActivity
 import com.examen.parrot.login.framework.UserPreferences
+import com.examen.parrot.shared.framework.RefreshWorker
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
+import java.util.concurrent.TimeUnit
 import kotlin.concurrent.schedule
 
 @AndroidEntryPoint
@@ -35,6 +42,9 @@ class LoginActivity : AppCompatActivity() {
 
 
         binding.lifecycleOwner=this
+
+        //Calling worker
+        enqueueWorker(this)
 
     }
 
@@ -76,6 +86,19 @@ class LoginActivity : AppCompatActivity() {
         }
 
 
+    }
+
+    /**
+     * Create worker for refresh data
+     */
+    private fun enqueueWorker(context: Context) {
+        val constraints = Constraints.Builder()
+            .setRequiresCharging(true)
+            .build()
+        val work = PeriodicWorkRequestBuilder<RefreshWorker>(5, TimeUnit.SECONDS)
+            .setConstraints(constraints)
+            .build()
+        WorkManager.getInstance(context).enqueue(work)
     }
 
 

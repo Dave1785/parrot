@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.examen.parrot">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
+
     <application
-        android:name=".ParrotApplication"
+        android:name=".application.ParrotApplication"
         android:allowBackup="true"
         android:icon="@drawable/parrot"
         android:networkSecurityConfig="@xml/network_security_config"
@@ -25,6 +27,11 @@
 
         <activity android:name=".login.ui.LoginActivity" android:label=""/>
         <activity android:name=".stores.ui.MainActivity" android:label="Stores"/>
+
+        <provider
+            android:name="androidx.work.impl.WorkManagerInitializer"
+            android:authorities="${applicationId}.workmanager-init"
+            tools:node="remove" />
 
     </application>
 
