@@ -1,10 +1,11 @@
 package com.examen.parrot.stores.domain
 
-import com.examen.parrot.stores.framework.Store
+import com.examen.parrot.stores.framework.StoreEntity
+
 
 data class Result(
 
     var uuid:String,
     var username:String,
-    var stores:List<Store>
+    var stores:List<StoreEntity>
 )

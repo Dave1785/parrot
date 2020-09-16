@@ -5,7 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.examen.parrot.stores.framework.Store
+import com.examen.parrot.stores.domain.Store
+import com.examen.parrot.stores.framework.StoreEntity
 import com.examen.parrot.stores.interactors.GetStores
 import com.examen.parrot.utils.Extensions.default
 import kotlinx.coroutines.launch
@@ -33,7 +34,7 @@ class MainActivityViewModel @ViewModelInject constructor(private val stores: Get
         }
     }
 
-    private fun getData(storeKeys:List<Store>?): HashMap<String, List<String>> {
+    private fun getData(storeKeys:List<StoreEntity>?): HashMap<String, List<String>> {
 
         val expandableListDetail = HashMap<String, List<String>>()
 
@@ -41,7 +42,7 @@ class MainActivityViewModel @ViewModelInject constructor(private val stores: Get
             for (store in storeKeys){
                 val storeList: MutableList<String> = ArrayList()
                 storeList.add("Store")
-                expandableListDetail[store.name] = storeList
+                expandableListDetail[store.uuid] = storeList
             }
         }
 

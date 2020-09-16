@@ -1,29 +1,20 @@
 package com.examen.parrot.stores.framework
 
-import androidx.room.*
+import androidx.lifecycle.LiveData
+import androidx.room.Dao
+import androidx.room.Insert
+import androidx.room.OnConflictStrategy
+import androidx.room.Query
 
 @Dao
 interface StoreDao {
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun addStore(store:Store )
-
-    @Update
-    fun updateStore(store: Store)
-
-    @Query("SELECT * from stores_table LIMIT 1")
-    fun getFirstStore():List<Store>
-
-    @Delete
-    fun deleteStore(song: Store)
-
-    @Query("DELETE FROM stores_table")
-    fun deleteAll()
-
-    @Query("SELECT * from stores_table ORDER BY title ASC")
-    fun getAllStores(): List<Store>
+    @Insert
+    fun addStore(store: StoreEntity)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(stores: List<Store>)
+    suspend fun insertAll(store: List<StoreEntity>?)
 
+    @Query("SELECT * FROM stores")
+    fun getAllStores() : List<StoreEntity>
 }

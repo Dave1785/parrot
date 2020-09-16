@@ -17,18 +17,40 @@ import java.util.*
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
+    private val mainActivityViewModel:MainActivityViewModel by viewModels()
 
+    private lateinit var binding:ActivityMainBinding
+    private lateinit var expandableListAdapter: CategoriesAdapter
+    private lateinit var expandableListTitle: List<String>
+    private lateinit var expandableListDetail: HashMap<String, List<String>>
+    private lateinit var token:String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding= DataBindingUtil.setContentView(this,R.layout.activity_main)
 
+        //Token
+        token = UserPreferences.getInstance(this).getValue(UserPreferences.DataType.TOKEN) as String
+        mainActivityViewModel.getStores(token)
+
+        binding.data=mainActivityViewModel
+        binding.lifecycleOwner=this
 
     }
 
     override fun onResume() {
         super.onResume()
 
-
+        mainActivityViewModel.storesList.observe(this, androidx.lifecycle.Observer {
+            mainActivityViewModel.showLoading(false)
+            if(it!=null){
+                Toast.makeText(this,"Response Stores ${it.keys.size}",Toast.LENGTH_LONG).show()
+                expandableListDetail = it
+                expandableListTitle = ArrayList(expandableListDetail?.keys)
+                expandableListAdapter = CategoriesAdapter(this, expandableListTitle, expandableListDetail)
+                binding.categoriesRv.setAdapter(expandableListAdapter)
+            }
+        })
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -52,4 +74,4 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-    }
+}

@@ -3,6 +3,7 @@ package com.examen.parrot.shared.di
 import android.content.Context
 import com.examen.parrot.login.data.LoginService
 import com.examen.parrot.stores.data.StoreService
+import com.examen.parrot.stores.framework.StoreDataBase
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -43,5 +44,12 @@ object AppModule {
     @Provides
     fun provideStoreService(retrofit: Retrofit): StoreService =retrofit.create(StoreService::class.java)
 
+    @Singleton
+    @Provides
+    fun provideDatabase(@ApplicationContext appContext: Context) = StoreDataBase.getDatabase(appContext)
+
+    @Singleton
+    @Provides
+    fun provideCharacterDao(db: StoreDataBase) = db.storeDao()
 
 }
