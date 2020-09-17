@@ -1,5 +1,6 @@
 package com.examen.parrot.stores.ui
 
+import android.content.Context
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -7,11 +8,14 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.work.*
 import com.examen.parrot.R
 import com.examen.parrot.databinding.ActivityMainBinding
 import com.examen.parrot.login.framework.UserPreferences
+import com.examen.parrot.shared.framework.RefreshWorker
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 
 @AndroidEntryPoint
@@ -27,7 +31,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding= DataBindingUtil.setContentView(this,R.layout.activity_main)
+        binding= DataBindingUtil.setContentView(this, R.layout.activity_main)
 
         //Token
         token = UserPreferences.getInstance(this).getValue(UserPreferences.DataType.TOKEN) as String
@@ -36,6 +40,8 @@ class MainActivity : AppCompatActivity() {
         binding.data=mainActivityViewModel
         binding.lifecycleOwner=this
 
+        enqueueWorker(this)
+
     }
 
     override fun onResume() {
@@ -43,11 +49,15 @@ class MainActivity : AppCompatActivity() {
 
         mainActivityViewModel.storesList.observe(this, androidx.lifecycle.Observer {
             mainActivityViewModel.showLoading(false)
-            if(it!=null){
-                Toast.makeText(this,"Response Stores ${it.keys.size}",Toast.LENGTH_LONG).show()
+            if (it != null) {
+                Toast.makeText(this, "Response Stores ${it.keys.size}", Toast.LENGTH_LONG).show()
                 expandableListDetail = it
                 expandableListTitle = ArrayList(expandableListDetail?.keys)
-                expandableListAdapter = CategoriesAdapter(this, expandableListTitle, expandableListDetail)
+                expandableListAdapter = CategoriesAdapter(
+                    this,
+                    expandableListTitle,
+                    expandableListDetail
+                )
                 binding.categoriesRv.setAdapter(expandableListAdapter)
             }
         })
@@ -63,7 +73,7 @@ class MainActivity : AppCompatActivity() {
 
         return when(item.itemId){
 
-            R.id.exit_app->{
+            R.id.exit_app -> {
                 UserPreferences.getInstance(this).clearData()
                 finish()
                 true
@@ -71,6 +81,21 @@ class MainActivity : AppCompatActivity() {
 
             else-> super.onOptionsItemSelected(item)
         }
+    }
+
+    /**
+     * Create worker for refresh data
+     */
+    private fun enqueueWorker(context: Context) {
+
+        val constraints = Constraints.Builder()
+            .setRequiresCharging(true)
+            .build()
+        val work = PeriodicWorkRequestBuilder<RefreshWorker>(1, TimeUnit.MINUTES)
+            .setConstraints(constraints)
+            .setInitialDelay(5, TimeUnit.MINUTES)
+            .build()
+        WorkManager.getInstance(context).enqueue(work)
     }
 
 

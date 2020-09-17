@@ -16,5 +16,5 @@ interface StoreDao {
     suspend fun insertAll(store: List<StoreEntity>?)
 
     @Query("SELECT * FROM stores")
-    fun getAllStores() : LiveData<List<StoreEntity>>
+    fun getAllStores() : List<StoreEntity>
 }

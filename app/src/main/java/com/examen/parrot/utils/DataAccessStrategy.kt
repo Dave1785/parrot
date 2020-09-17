@@ -1,16 +1,18 @@
 package com.examen.parrot.utils
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.liveData
-import androidx.lifecycle.map
+import com.examen.parrot.stores.domain.ResponseStore
+import com.examen.parrot.stores.framework.StoreEntity
 import com.examen.parrot.utils.Resource.*
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 
-fun <T, A> performGetOperation(databaseQuery: () -> LiveData<T>,
-                               networkCall: suspend () -> Resource<A>,
-                               saveCallResult: suspend (A) -> Unit): LiveData<Resource<T>> =
-    liveData(Dispatchers.IO) {
+suspend fun performGetOperation(
+    databaseQuery: () -> List<StoreEntity>,
+    networkCall: suspend () -> Resource<ResponseStore>,
+    saveCallResult: suspend (store: List<StoreEntity>?) -> Unit): List<StoreEntity>? {
+
+/*    liveData(Dispatchers.IO) {
         emit(Resource.loading())
         val source = databaseQuery.invoke().map { Resource.success(it) }
         emitSource(source)
@@ -23,4 +25,26 @@ fun <T, A> performGetOperation(databaseQuery: () -> LiveData<T>,
             emit(Resource.error(responseStatus.message!!))
             emitSource(source)
         }
+    }*/
+
+    return try{
+        var res:List<StoreEntity>?=null
+
+        withContext(Dispatchers.IO){
+            var responseStore=networkCall.invoke()
+            res = if(responseStore.status==Status.SUCCESS){
+                saveCallResult.invoke(responseStore.data?.result?.stores)
+                responseStore.data?.result?.stores
+            }else{
+                databaseQuery.invoke()
+            }
+            res
+        }
+
+
+    }catch (e:Exception){
+        null
     }
+
+
+}

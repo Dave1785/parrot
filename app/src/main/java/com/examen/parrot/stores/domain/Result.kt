@@ -7,5 +7,5 @@ data class Result(
 
     var uuid:String,
     var username:String,
-    var stores:List<StoreEntity>
+    var stores:List<StoreEntity>?
 )

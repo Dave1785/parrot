@@ -6,6 +6,8 @@ import androidx.hilt.Assisted
 import androidx.hilt.work.WorkerInject
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import com.examen.parrot.login.framework.UserPreferences
+import com.examen.parrot.stores.interactors.GetStores
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
@@ -16,7 +18,7 @@ import java.util.*
 
 
 class RefreshWorker @WorkerInject constructor(
-    @Assisted context: Context, @Assisted params: WorkerParameters
+    @Assisted context: Context, @Assisted params: WorkerParameters,val getStores: GetStores
 ) : CoroutineWorker(context,params) {
 
 
@@ -25,6 +27,11 @@ class RefreshWorker @WorkerInject constructor(
         val simpleDateFormat = SimpleDateFormat("yyyy.MM.dd G 'at' HH:mm:ss z")
         val currentDateAndTime: String = simpleDateFormat.format(Date())
         Log.d("Refreshing","Refreshing data $currentDateAndTime")
+
+
+        val token = inputData.getString("token") ?: ""
+        getStores.getStoresRefresh(token)
+
 
         Result.success()
     }

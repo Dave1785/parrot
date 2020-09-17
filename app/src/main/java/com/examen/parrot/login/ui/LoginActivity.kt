@@ -43,9 +43,6 @@ class LoginActivity : AppCompatActivity() {
 
         binding.lifecycleOwner=this
 
-        //Calling worker
-        enqueueWorker(this)
-
     }
 
     override fun onResume() {
@@ -88,18 +85,7 @@ class LoginActivity : AppCompatActivity() {
 
     }
 
-    /**
-     * Create worker for refresh data
-     */
-    private fun enqueueWorker(context: Context) {
-        val constraints = Constraints.Builder()
-            .setRequiresCharging(true)
-            .build()
-        val work = PeriodicWorkRequestBuilder<RefreshWorker>(5, TimeUnit.SECONDS)
-            .setConstraints(constraints)
-            .build()
-        WorkManager.getInstance(context).enqueue(work)
-    }
+
 
 
 }

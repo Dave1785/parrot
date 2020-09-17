@@ -30,7 +30,7 @@ class MainActivityViewModel @ViewModelInject constructor(private val stores: Get
     fun getStores(token:String){
         showLoading(true)
         viewModelScope.launch {
-          Log.d("","")
+            _storesList.value=getData(stores.getStores("Bearer $token"))
         }
     }
 
