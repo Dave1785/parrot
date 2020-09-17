@@ -13,13 +13,14 @@ import com.examen.parrot.R
 import com.examen.parrot.databinding.ActivityMainBinding
 import com.examen.parrot.login.framework.UserPreferences
 import com.examen.parrot.shared.framework.RefreshWorker
+import com.examen.parrot.stores.data.onUpdateDataListener
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 import java.util.concurrent.TimeUnit
 
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), onUpdateDataListener {
 
     private val mainActivityViewModel:MainActivityViewModel by viewModels()
 
@@ -35,8 +36,8 @@ class MainActivity : AppCompatActivity() {
 
         //Token
         token = UserPreferences.getInstance(this).getValue(UserPreferences.DataType.TOKEN) as String
-        mainActivityViewModel.setListenerData()
         mainActivityViewModel.getStores(token)
+        mainActivityViewModel.setListener(this)
 
         binding.data=mainActivityViewModel
         binding.lifecycleOwner=this
@@ -53,7 +54,7 @@ class MainActivity : AppCompatActivity() {
             if (it != null) {
                 Toast.makeText(this, "Response Stores ${it.keys.size}", Toast.LENGTH_LONG).show()
                 expandableListDetail = it
-                expandableListTitle = ArrayList(expandableListDetail?.keys)
+                expandableListTitle = ArrayList(expandableListDetail.keys)
                 expandableListAdapter = CategoriesAdapter(
                     this,
                     expandableListTitle,
@@ -89,14 +90,34 @@ class MainActivity : AppCompatActivity() {
      */
     private fun enqueueWorker(context: Context) {
 
+        token = UserPreferences.getInstance(this).getValue(UserPreferences.DataType.TOKEN) as String
+        val data= Data.Builder()
+        data.putString("Token", token)
         val constraints = Constraints.Builder()
             .setRequiresCharging(true)
             .build()
-        val work = PeriodicWorkRequestBuilder<RefreshWorker>(1, TimeUnit.MINUTES)
+        val work = PeriodicWorkRequestBuilder<RefreshWorker>(1,TimeUnit.MINUTES)
             .setConstraints(constraints)
-            .setInitialDelay(5, TimeUnit.MINUTES)
+            .setInitialDelay(1,TimeUnit.MINUTES)
+            .setInputData(data.build())
             .build()
         WorkManager.getInstance(context).enqueue(work)
+    }
+
+    override fun onDataUpdate(stores: HashMap<String, List<String>>) {
+        runOnUiThread {
+            expandableListDetail = stores
+            expandableListTitle = ArrayList(expandableListDetail?.keys)
+            expandableListAdapter = CategoriesAdapter(
+                this,
+                expandableListTitle,
+                expandableListDetail
+            )
+            binding.categoriesRv.setAdapter(expandableListAdapter)
+
+            Toast.makeText(this,"Actualizado desde el worker",Toast.LENGTH_LONG).show()
+        }
+
     }
 
 

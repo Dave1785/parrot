@@ -1,7 +1,7 @@
 package com.examen.parrot.stores.data
 
-import com.examen.parrot.stores.framework.StoreEntity
+import java.util.HashMap
 
 interface onUpdateDataListener  {
-    fun onDataUpdate(stores:List<StoreEntity>?)
+    fun onDataUpdate(stores: HashMap<String, List<String>>)
 }
