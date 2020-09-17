@@ -25,7 +25,7 @@ class RefreshWorker @WorkerInject constructor(
         Log.d("Refreshing","Refreshing data $currentDateAndTime")
 
 
-        val token = inputData.getString("token") ?: ""
+        val token = inputData.getString("Token") ?: ""
         getStores.getStoresRefresh(token)
 
 

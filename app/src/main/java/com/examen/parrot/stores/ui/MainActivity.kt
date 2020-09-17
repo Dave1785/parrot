@@ -17,6 +17,8 @@ import com.examen.parrot.stores.data.onUpdateDataListener
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
 import java.util.concurrent.TimeUnit
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 
 @AndroidEntryPoint
@@ -37,8 +39,9 @@ class MainActivity : AppCompatActivity(), onUpdateDataListener {
         //Token
         token = UserPreferences.getInstance(this).getValue(UserPreferences.DataType.TOKEN) as String
         mainActivityViewModel.getStores(token)
+        expandableListAdapter= CategoriesAdapter(this,null,null)
         mainActivityViewModel.setListener(this)
-
+        binding.categoriesRv.setAdapter(expandableListAdapter)
         binding.data=mainActivityViewModel
         binding.lifecycleOwner=this
 
@@ -53,14 +56,7 @@ class MainActivity : AppCompatActivity(), onUpdateDataListener {
             mainActivityViewModel.showLoading(false)
             if (it != null) {
                 Toast.makeText(this, "Response Stores ${it.keys.size}", Toast.LENGTH_LONG).show()
-                expandableListDetail = it
-                expandableListTitle = ArrayList(expandableListDetail.keys)
-                expandableListAdapter = CategoriesAdapter(
-                    this,
-                    expandableListTitle,
-                    expandableListDetail
-                )
-                binding.categoriesRv.setAdapter(expandableListAdapter)
+                updateData(it)
             }
         })
     }
@@ -94,6 +90,7 @@ class MainActivity : AppCompatActivity(), onUpdateDataListener {
         val data= Data.Builder()
         data.putString("Token", token)
         val constraints = Constraints.Builder()
+            .setRequiredNetworkType(NetworkType.CONNECTED)
             .setRequiresCharging(true)
             .build()
         val work = PeriodicWorkRequestBuilder<RefreshWorker>(1,TimeUnit.MINUTES)
@@ -104,20 +101,26 @@ class MainActivity : AppCompatActivity(), onUpdateDataListener {
         WorkManager.getInstance(context).enqueue(work)
     }
 
+    /**
+     * Callback from worker
+     */
     override fun onDataUpdate(stores: HashMap<String, List<String>>) {
-        runOnUiThread {
-            expandableListDetail = stores
-            expandableListTitle = ArrayList(expandableListDetail?.keys)
-            expandableListAdapter = CategoriesAdapter(
-                this,
-                expandableListTitle,
-                expandableListDetail
-            )
-            binding.categoriesRv.setAdapter(expandableListAdapter)
 
+        runOnUiThread {
+            updateData(stores)
             Toast.makeText(this,"Actualizado desde el worker",Toast.LENGTH_LONG).show()
         }
 
+    }
+
+
+    /**
+     * Refreshing data
+     */
+    private fun updateData(stores: HashMap<String, List<String>>){
+        if(expandableListAdapter!=null){
+            expandableListAdapter.updateData(stores)
+        }
     }
 
 

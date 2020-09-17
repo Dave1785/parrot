@@ -13,11 +13,11 @@ import java.util.*
 
 class CategoriesAdapter internal constructor(
     private val context: Context,
-    private val titleList: List<String>,
-    private val dataList: HashMap<String, List<String>>
+    private var titleList: List<String>?,
+    private var dataList: HashMap<String, List<String>>?
 ) : BaseExpandableListAdapter() {
     override fun getChild(listPosition: Int, expandedListPosition: Int): Any {
-        return this.dataList[this.titleList[listPosition]]!![expandedListPosition]
+        return this.dataList?.get(this.titleList?.get(listPosition))!![expandedListPosition]
     }
     override fun getChildId(listPosition: Int, expandedListPosition: Int): Long {
         return expandedListPosition.toLong()
@@ -41,13 +41,13 @@ class CategoriesAdapter internal constructor(
         return convertView
     }
     override fun getChildrenCount(listPosition: Int): Int {
-        return this.dataList[this.titleList[listPosition]]!!.size
+        return this.dataList?.get(this.titleList?.get(listPosition))!!.size
     }
-    override fun getGroup(listPosition: Int): Any {
-        return this.titleList[listPosition]
+    override fun getGroup(listPosition: Int): String? {
+        return this.titleList?.get(listPosition)
     }
     override fun getGroupCount(): Int {
-        return this.titleList.size
+        return this.titleList?.size ?: 0
     }
     override fun getGroupId(listPosition: Int): Long {
         return listPosition.toLong()
@@ -75,5 +75,19 @@ class CategoriesAdapter internal constructor(
     }
     override fun isChildSelectable(listPosition: Int, expandedListPosition: Int): Boolean {
         return true
+    }
+
+    fun updateData(stores: HashMap<String, List<String>>){
+        this.titleList=ArrayList(stores?.keys)
+        this.dataList=stores
+        notifyDataSetChanged()
+    }
+
+    /**
+     * Set default data
+     */
+    fun setDefaultData(categoriesAdapter: CategoriesAdapter){
+        this.titleList=ArrayList<String>()
+        this.dataList=HashMap<String,List<String>>()
     }
 }

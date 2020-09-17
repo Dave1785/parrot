@@ -15,11 +15,11 @@ class GetStores @Inject constructor(private val storeRepository: StoreRepository
     private var onUpdateDataListener: onUpdateDataListener?=null
 
      suspend fun getStores(token: String):HashMap<String, List<String>> {
-       return getData(storeRepository.getStores(token))
+       return getData(storeRepository.getStores("Bearer $token"))
     }
 
     suspend fun getStoresRefresh(token: String){
-        val stores=storeRepository.getStores(token)
+        val stores=storeRepository.getStores("Bearer $token")
         onUpdateDataListener?.onDataUpdate(getData(stores))
     }
 
