@@ -18,7 +18,7 @@ import java.util.*
 
 
 class RefreshWorker @WorkerInject constructor(
-    @Assisted context: Context, @Assisted params: WorkerParameters,val getStores: GetStores
+    @Assisted context: Context, @Assisted params: WorkerParameters, private val getStores: GetStores
 ) : CoroutineWorker(context,params) {
 
 

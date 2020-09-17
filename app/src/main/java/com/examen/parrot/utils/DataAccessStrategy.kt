@@ -1,5 +1,6 @@
 package com.examen.parrot.utils
 
+import android.util.Log
 import com.examen.parrot.stores.domain.ResponseStore
 import com.examen.parrot.stores.framework.StoreEntity
 import com.examen.parrot.utils.Resource.*
@@ -33,13 +34,25 @@ suspend fun performGetOperation(
         withContext(Dispatchers.IO){
             var responseStore=networkCall.invoke()
             res = if(responseStore.status==Status.SUCCESS){
+                Log.d("Info","Se actualizo info")
                 saveCallResult.invoke(responseStore.data?.result?.stores)
                 responseStore.data?.result?.stores
             }else{
-                databaseQuery.invoke()
+
+                Log.d("Info","Se accedio a la base")
+                try {
+                    Log.d("Info","Se obtuvo info de la base")
+                    databaseQuery.invoke()
+                }catch (e:Exception){
+                    Log.d("Info","Fallo acceso a la base ")
+                     null
+                }
             }
+
             res
         }
+
+
 
 
     }catch (e:Exception){

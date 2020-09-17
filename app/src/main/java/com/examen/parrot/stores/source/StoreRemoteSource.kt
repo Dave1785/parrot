@@ -11,9 +11,7 @@ import javax.inject.Inject
 class StoreRemoteSource @Inject constructor(private val storeService: StoreService): BaseDataSource() {
 
      suspend fun  getStoresAsync(token:String):Resource<ResponseStore>{
-         val res= getResult { storeService.getStoresAsync(token)}
-          Log.d("Res","Res $res")
-         return res
+         return getResult { storeService.getStoresAsync(token)}
      }
 
 
