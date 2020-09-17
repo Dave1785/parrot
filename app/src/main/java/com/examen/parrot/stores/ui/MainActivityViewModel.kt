@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.examen.parrot.stores.data.onUpdateDataListener
 import com.examen.parrot.stores.domain.Store
 import com.examen.parrot.stores.framework.StoreEntity
 import com.examen.parrot.stores.interactors.GetStores
@@ -14,7 +15,7 @@ import kotlinx.coroutines.launch
 import java.util.ArrayList
 import java.util.HashMap
 
-class MainActivityViewModel @ViewModelInject constructor(private val stores: GetStores) : ViewModel() {
+class MainActivityViewModel @ViewModelInject constructor(private val stores: GetStores) : ViewModel(),onUpdateDataListener {
 
     //Token
     var token=MutableLiveData<String>()
@@ -26,6 +27,10 @@ class MainActivityViewModel @ViewModelInject constructor(private val stores: Get
     private var _storesList= MutableLiveData<HashMap<String, List<String>>>()
     val storesList : LiveData<HashMap<String, List<String>>>
         get() = _storesList
+
+    fun setListenerData(){
+        stores.setListenerData(this)
+    }
 
     fun getStores(token:String){
         showLoading(true)
@@ -51,6 +56,11 @@ class MainActivityViewModel @ViewModelInject constructor(private val stores: Get
 
     fun showLoading(isLoading:Boolean){
         loader.value=isLoading
+    }
+
+    override fun onDataUpdate(stores: List<StoreEntity>?) {
+        _storesList.value=getData(stores)
+        Log.d("Info","Se actualizo data desde el worker")
     }
 
 

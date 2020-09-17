@@ -35,6 +35,7 @@ class MainActivity : AppCompatActivity() {
 
         //Token
         token = UserPreferences.getInstance(this).getValue(UserPreferences.DataType.TOKEN) as String
+        mainActivityViewModel.setListenerData()
         mainActivityViewModel.getStores(token)
 
         binding.data=mainActivityViewModel

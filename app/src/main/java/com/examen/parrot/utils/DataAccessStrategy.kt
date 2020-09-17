@@ -13,23 +13,10 @@ suspend fun performGetOperation(
     networkCall: suspend () -> Resource<ResponseStore>,
     saveCallResult: suspend (store: List<StoreEntity>?) -> Unit): List<StoreEntity>? {
 
-/*    liveData(Dispatchers.IO) {
-        emit(Resource.loading())
-        val source = databaseQuery.invoke().map { Resource.success(it) }
-        emitSource(source)
-
-        val responseStatus = networkCall.invoke()
-        if (responseStatus.status == Status.SUCCESS) {
-            saveCallResult(responseStatus.data!!)
-
-        } else if (responseStatus.status == Status.ERROR) {
-            emit(Resource.error(responseStatus.message!!))
-            emitSource(source)
-        }
-    }*/
 
     return try{
-        var res:List<StoreEntity>?=null
+
+        var res:List<StoreEntity>?
 
         withContext(Dispatchers.IO){
             var responseStore=networkCall.invoke()
@@ -51,8 +38,6 @@ suspend fun performGetOperation(
 
             res
         }
-
-
 
 
     }catch (e:Exception){

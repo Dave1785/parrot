@@ -18,13 +18,5 @@ class StoreRepository @Inject constructor(
         saveCallResult = { storeDao.insertAll(it) }
     )
 
-/*    var stores=storeSource.getStoresAsync(token)
-    if(stores==null){
-        return storeDao.getAllStores()
-    }else{
-        storeDao.insertAll(stores.result.stores)
-    }
-    val stories=storeDao.getAllStores()
-    return stories*/
 
 }

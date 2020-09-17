@@ -3,7 +3,6 @@ package com.examen.parrot.application
 import android.app.Application
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
-import com.examen.parrot.shared.framework.AppWorkerFactory
 import dagger.hilt.android.HiltAndroidApp
 import javax.inject.Inject
 

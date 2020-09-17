@@ -6,13 +6,9 @@ import androidx.hilt.Assisted
 import androidx.hilt.work.WorkerInject
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
-import com.examen.parrot.login.framework.UserPreferences
 import com.examen.parrot.stores.interactors.GetStores
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.withContext
-import okhttp3.Dispatcher
 import java.text.SimpleDateFormat
 import java.util.*
 
