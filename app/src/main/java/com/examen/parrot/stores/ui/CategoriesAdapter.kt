@@ -77,6 +77,7 @@ class CategoriesAdapter internal constructor(
             response.observe(lifecycleOwner, Observer {
                 Log.d("Info","Se actualizo yeihhh $it")
                 product=it.result
+                binding.status.text=product.availability
                 binding.invalidateAll()
             })
 
