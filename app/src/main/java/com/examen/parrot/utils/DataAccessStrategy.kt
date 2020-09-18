@@ -7,7 +7,6 @@ import com.examen.parrot.utils.Resource.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-
 suspend fun performGetOperation(
     databaseQuery: () -> List<StoreEntity>,
     networkCall: suspend () -> Resource<ResponseStore>,
@@ -22,7 +21,11 @@ suspend fun performGetOperation(
             var responseStore=networkCall.invoke()
             res = if(responseStore.status==Status.SUCCESS){
                 Log.d("Info","Se actualizo info")
-                saveCallResult.invoke(responseStore.data?.result?.stores)
+                try{
+                    saveCallResult.invoke(responseStore.data?.result?.stores)
+                }catch (e:Exception){
+                    Log.d("info","Exception")
+                }
                 responseStore.data?.result?.stores
             }else{
 

@@ -1,6 +1,5 @@
 package com.examen.parrot.utils
 
-
 import kotlinx.coroutines.Deferred
 
 abstract class BaseDataSource {

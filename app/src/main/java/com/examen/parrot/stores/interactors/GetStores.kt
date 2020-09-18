@@ -1,41 +1,44 @@
 package com.examen.parrot.stores.interactors
 
-
 import com.examen.parrot.stores.data.StoreRepository
-import com.examen.parrot.stores.data.onUpdateDataListener
+import com.examen.parrot.stores.data.OnUpdateDataListener
+import com.examen.parrot.stores.framework.Product
 import com.examen.parrot.stores.framework.StoreEntity
-import java.util.ArrayList
-import java.util.HashMap
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class GetStores @Inject constructor(private val storeRepository: StoreRepository) {
 
-    private var onUpdateDataListener: onUpdateDataListener?=null
+    private var onUpdateDataListener: OnUpdateDataListener? = null
 
-     suspend fun getStores(token: String):HashMap<String, List<String>> {
-       return getData(storeRepository.getStores("Bearer $token"))
+    suspend fun getStores(token: String): HashMap<String, StoreEntity> {
+        return getData(storeRepository.getStores(token))
     }
 
-    suspend fun getStoresRefresh(token: String){
-        val stores=storeRepository.getStores("Bearer $token")
-        onUpdateDataListener?.onDataUpdate(getData(stores))
+    suspend fun getProducts(token: String, storeId: String): List<Product>? {
+        return storeRepository.getProducts(token, storeId)
     }
 
-    fun setListener(onUpdateDataListener: onUpdateDataListener){
-        this.onUpdateDataListener=onUpdateDataListener
+    fun setListener(onUpdateDataListener: OnUpdateDataListener) {
+        this.onUpdateDataListener = onUpdateDataListener
     }
 
-    private fun getData(storeKeys:List<StoreEntity>?): HashMap<String, List<String>> {
+    fun updateData() {
+        onUpdateDataListener?.onDataUpdate()
+    }
 
-        val expandableListDetail = HashMap<String, List<String>>()
+    /**
+     * Parse data
+     */
+    private fun getData(storeKeys: List<StoreEntity>?): HashMap<String, StoreEntity> {
+
+        val expandableListDetail = HashMap<String, StoreEntity>()
 
         if (storeKeys != null) {
-            for (store in storeKeys){
-                val storeList: MutableList<String> = ArrayList()
-                storeList.add("Store")
-                expandableListDetail[store.name] = storeList
+            for (store in storeKeys) {
+                expandableListDetail[store.name] = store
             }
         }
 

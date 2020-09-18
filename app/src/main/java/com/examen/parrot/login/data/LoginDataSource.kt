@@ -2,7 +2,6 @@ package com.examen.parrot.login.data
 
 import com.examen.parrot.login.domain.LoginRequestDTO
 import com.examen.parrot.login.domain.ResponseLogin
-import kotlinx.coroutines.Deferred
 
 /**
  * Class that handles authentication w/ login credentials and retrieves user information.

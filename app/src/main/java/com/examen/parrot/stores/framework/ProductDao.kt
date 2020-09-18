@@ -6,14 +6,12 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 
 @Dao
-interface StoreDao {
-
-    @Insert
-    fun addStore(store: StoreEntity)
+interface ProductDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(store: List<StoreEntity>?)
+    suspend fun insertAll(store: List<Product>?)
 
-    @Query("SELECT * FROM stores")
-    fun getAllStores() : List<StoreEntity>
+    @Query("SELECT * FROM products")
+    fun getAllProducts() : List<Product>
+
 }

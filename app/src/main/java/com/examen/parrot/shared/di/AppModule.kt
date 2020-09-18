@@ -4,9 +4,12 @@ import android.content.Context
 import com.examen.parrot.login.data.LoginService
 import com.examen.parrot.stores.data.StoreRepository
 import com.examen.parrot.stores.data.StoreService
+import com.examen.parrot.stores.framework.ProductDao
 import com.examen.parrot.stores.framework.StoreDao
 import com.examen.parrot.stores.framework.StoreDataBase
 import com.examen.parrot.stores.source.StoreRemoteSource
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
@@ -16,7 +19,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.components.ApplicationComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
 import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
+import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
 
 
@@ -32,12 +35,16 @@ object AppModule {
             .build()
     }
 
+    @Provides
+    fun provideGson(): Gson {
+      return  GsonBuilder().create()
+    }
 
     @Singleton
     @Provides
     fun provideRetrofit() : Retrofit = Retrofit.Builder()
         .baseUrl("http://api-staging.parrot.rest")
-        .addConverterFactory(MoshiConverterFactory.create(getMoshiInstance()))
+        .addConverterFactory(GsonConverterFactory.create(provideGson()))
         .addCallAdapterFactory(CoroutineCallAdapterFactory())
         .build()
 
@@ -57,8 +64,14 @@ object AppModule {
 
     @Singleton
     @Provides
+    fun provideProductDao(db: StoreDataBase) = db.productDao()
+
+    @Singleton
+    @Provides
     fun provideRepository(remoteDataSource: StoreRemoteSource,
-                          localDataSource: StoreDao) =
-        StoreRepository(remoteDataSource, localDataSource)
+                          localDataSource: StoreDao,productDao: ProductDao) =
+        StoreRepository(remoteDataSource, localDataSource,productDao)
+
+
 
 }

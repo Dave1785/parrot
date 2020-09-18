@@ -8,29 +8,29 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
 import androidx.work.*
 import com.examen.parrot.R
 import com.examen.parrot.databinding.ActivityMainBinding
 import com.examen.parrot.login.framework.UserPreferences
 import com.examen.parrot.shared.framework.RefreshWorker
-import com.examen.parrot.stores.data.onUpdateDataListener
+import com.examen.parrot.stores.data.OnUpdateDataListener
+import com.examen.parrot.stores.framework.Product
 import dagger.hilt.android.AndroidEntryPoint
-import java.util.*
 import java.util.concurrent.TimeUnit
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
 
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity(), onUpdateDataListener {
+class MainActivity : AppCompatActivity(), OnUpdateDataListener {
 
     private val mainActivityViewModel:MainActivityViewModel by viewModels()
 
     private lateinit var binding:ActivityMainBinding
     private lateinit var expandableListAdapter: CategoriesAdapter
-    private lateinit var expandableListTitle: List<String>
-    private lateinit var expandableListDetail: HashMap<String, List<String>>
     private lateinit var token:String
+    private lateinit var currentStore:String
+    private var listStores= mutableListOf<String>()
+    private var listProducts= mutableMapOf<String,MutableList<Product>>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,13 +38,15 @@ class MainActivity : AppCompatActivity(), onUpdateDataListener {
 
         //Token
         token = UserPreferences.getInstance(this).getValue(UserPreferences.DataType.TOKEN) as String
-        mainActivityViewModel.getStores(token)
-        expandableListAdapter= CategoriesAdapter(this,null,null)
+        //mainActivityViewModel.getStores(token)
+
+        expandableListAdapter= CategoriesAdapter(this, listStores, listProducts)
         mainActivityViewModel.setListener(this)
         binding.categoriesRv.setAdapter(expandableListAdapter)
         binding.data=mainActivityViewModel
         binding.lifecycleOwner=this
 
+        //Initializing Worker
         enqueueWorker(this)
 
     }
@@ -56,9 +58,29 @@ class MainActivity : AppCompatActivity(), onUpdateDataListener {
             mainActivityViewModel.showLoading(false)
             if (it != null) {
                 Toast.makeText(this, "Response Stores ${it.keys.size}", Toast.LENGTH_LONG).show()
-                updateData(it)
+
+                val keys=it.keys
+                listStores=keys.toMutableList()
+
+                for(key in keys){
+                    val storeId= it[key]?.uuid ?: ""
+                    currentStore=key
+                    synchronized(this){mainActivityViewModel.getProducts(token,storeId)}
+                }
+
             }
         })
+
+        mainActivityViewModel.productsList.observe(this, Observer {
+            mainActivityViewModel.showLoading(false)
+
+            listProducts[currentStore] = it.toMutableList()
+            //mainActivityViewModel.updateProducts(currentStore,it)
+            expandableListAdapter.updateChildList(listStores, listProducts )
+
+            Toast.makeText(this,"Se actualizaron productos",Toast.LENGTH_LONG).show()
+        })
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -93,9 +115,8 @@ class MainActivity : AppCompatActivity(), onUpdateDataListener {
             .setRequiredNetworkType(NetworkType.CONNECTED)
             .setRequiresCharging(true)
             .build()
-        val work = PeriodicWorkRequestBuilder<RefreshWorker>(1,TimeUnit.MINUTES)
+        val work = PeriodicWorkRequestBuilder<RefreshWorker>(1, TimeUnit.MINUTES)
             .setConstraints(constraints)
-            .setInitialDelay(1,TimeUnit.MINUTES)
             .setInputData(data.build())
             .build()
         WorkManager.getInstance(context).enqueue(work)
@@ -104,24 +125,15 @@ class MainActivity : AppCompatActivity(), onUpdateDataListener {
     /**
      * Callback from worker
      */
-    override fun onDataUpdate(stores: HashMap<String, List<String>>) {
+    override fun onDataUpdate() {
 
         runOnUiThread {
-            updateData(stores)
-            Toast.makeText(this,"Actualizado desde el worker",Toast.LENGTH_LONG).show()
+            mainActivityViewModel.getStores(token)
+            Toast.makeText(this, "Actualizado desde el worker", Toast.LENGTH_LONG).show()
         }
 
     }
 
-
-    /**
-     * Refreshing data
-     */
-    private fun updateData(stores: HashMap<String, List<String>>){
-        if(expandableListAdapter!=null){
-            expandableListAdapter.updateData(stores)
-        }
-    }
 
 
 }

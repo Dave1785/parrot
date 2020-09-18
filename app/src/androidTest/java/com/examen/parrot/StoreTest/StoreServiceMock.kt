@@ -1,6 +1,5 @@
 package com.examen.parrot.StoreTest
 
-
 import com.examen.parrot.stores.data.StoreService
 import com.examen.parrot.stores.domain.ResponseStore
 import com.examen.parrot.stores.domain.Result

@@ -1,13 +1,11 @@
 package com.examen.parrot.login.ui
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
 import android.view.View
 import androidx.hilt.lifecycle.ViewModelInject
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.examen.parrot.login.data.LoginRepository
-
 import com.examen.parrot.login.domain.LoginRequestDTO
 import com.examen.parrot.login.domain.ResponseLogin
 import com.examen.parrot.login.interactors.Login

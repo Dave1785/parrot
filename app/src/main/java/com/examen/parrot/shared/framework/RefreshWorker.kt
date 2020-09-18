@@ -14,7 +14,7 @@ import java.util.*
 
 
 class RefreshWorker @WorkerInject constructor(
-    @Assisted context: Context, @Assisted params: WorkerParameters, private val getStores: GetStores
+    @Assisted context: Context, @Assisted params: WorkerParameters,val getStores: GetStores
 ) : CoroutineWorker(context,params) {
 
 
@@ -24,10 +24,7 @@ class RefreshWorker @WorkerInject constructor(
         val currentDateAndTime: String = simpleDateFormat.format(Date())
         Log.d("Refreshing","Refreshing data $currentDateAndTime")
 
-
-        val token = inputData.getString("Token") ?: ""
-        getStores.getStoresRefresh(token)
-
+        getStores.updateData()
 
         Result.success()
     }

@@ -14,4 +14,5 @@ data class StoreEntity(
     @NonNull
     @ColumnInfo(name = "name")
     var name: String
+
 )
