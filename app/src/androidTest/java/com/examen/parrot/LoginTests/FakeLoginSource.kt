@@ -3,6 +3,7 @@ package com.examen.parrot.LoginTests
 import com.examen.parrot.login.data.LoginDataSource
 import com.examen.parrot.login.domain.LoginRequestDTO
 import com.examen.parrot.login.domain.ResponseLogin
+import com.examen.parrot.login.domain.ResponseValidateToken
 
 class FakeLoginSource : LoginDataSource {
 
@@ -19,11 +20,7 @@ class FakeLoginSource : LoginDataSource {
        return mockLoginSource.doLogin(loginRequestDTO)
     }
 
-    override suspend fun logout() {
-        TODO("Not yet implemented")
-    }
-
-    override fun getToken(): String {
+    override suspend fun validateToken(): ResponseValidateToken {
         TODO("Not yet implemented")
     }
 

@@ -4,6 +4,7 @@ import com.examen.parrot.login.data.LoginDataSource
 import com.examen.parrot.login.data.LoginService
 import com.examen.parrot.login.domain.LoginRequestDTO
 import com.examen.parrot.login.domain.ResponseLogin
+import com.examen.parrot.login.domain.ResponseValidateToken
 import javax.inject.Inject
 
 
@@ -13,12 +14,8 @@ class LoginSource @Inject constructor(val loginService: LoginService) : LoginDat
        return loginService.doLogin(loginRequestDTO).await()
     }
 
-    override suspend fun logout() {
-        TODO("Not yet implemented")
-    }
-
-    override fun getToken(): String {
-        TODO("Not yet implemented")
+    override suspend fun validateToken(token:String): ResponseValidateToken {
+        return loginService.validateToken("Bearer $token").await()
     }
 
 
