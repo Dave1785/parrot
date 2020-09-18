@@ -87,7 +87,10 @@ class CategoriesAdapter internal constructor(
 
 
         val listTitle = getGroup(listPosition) as String
+        val itemsCount= dataList?.get(this.titleList?.get(listPosition))?.size ?: 0
+
         binding.title=listTitle
+        binding.items=itemsCount.toString()
         binding.lifecycleOwner=lifecycleOwner
         binding.invalidateAll()
 
