@@ -38,7 +38,7 @@ class MainActivity : AppCompatActivity(), OnUpdateDataListener {
 
         //Token
         token = UserPreferences.getInstance(this).getValue(UserPreferences.DataType.TOKEN) as String
-        //mainActivityViewModel.getStores(token)
+        mainActivityViewModel.getStores(token)
 
         expandableListAdapter= CategoriesAdapter(this, listStores, listProducts,this)
         mainActivityViewModel.setListener(this)
@@ -117,6 +117,7 @@ class MainActivity : AppCompatActivity(), OnUpdateDataListener {
             .build()
         val work = PeriodicWorkRequestBuilder<RefreshWorker>(1, TimeUnit.MINUTES)
             .setConstraints(constraints)
+            .setInitialDelay(1,TimeUnit.MINUTES)
             .setInputData(data.build())
             .build()
         WorkManager.getInstance(context).enqueue(work)
