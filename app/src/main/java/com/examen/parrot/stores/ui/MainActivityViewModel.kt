@@ -7,11 +7,15 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.examen.parrot.stores.data.OnUpdateDataListener
+import com.examen.parrot.stores.domain.RequestUpdateProduct
+import com.examen.parrot.stores.domain.ResponseUpdateProduct
 import com.examen.parrot.stores.framework.Product
 import com.examen.parrot.stores.framework.StoreEntity
 import com.examen.parrot.stores.interactors.GetStores
 import com.examen.parrot.utils.Extensions.default
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.util.*
 
 class MainActivityViewModel @ViewModelInject constructor(private val stores: GetStores) :
@@ -50,6 +54,16 @@ class MainActivityViewModel @ViewModelInject constructor(private val stores: Get
             _productsList.value = stores.getProducts("Bearer $token", storeId)
         }
     }
+
+    var update={
+            data:MutableLiveData<ResponseUpdateProduct>,token: String, productId:String, requestUpdateProduct: RequestUpdateProduct->
+        viewModelScope.launch {
+            withContext(Dispatchers.Main){
+               data.value= stores.updateProduct("Bearer $token",productId,requestUpdateProduct)
+            }
+        }
+    }
+
 
     fun showLoading(isLoading: Boolean) {
         loader.value = isLoading

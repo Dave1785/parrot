@@ -1,17 +1,27 @@
 package com.examen.parrot.stores.ui
 
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseExpandableListAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.examen.parrot.R
 import com.examen.parrot.databinding.ListGroupBinding
 import com.examen.parrot.databinding.ListItemBinding
+import com.examen.parrot.login.framework.UserPreferences
+import com.examen.parrot.stores.domain.RequestUpdateProduct
+import com.examen.parrot.stores.domain.ResponseUpdateProduct
 import com.examen.parrot.stores.framework.Product
+import com.examen.parrot.stores.interactors.GetStores
+import com.examen.parrot.utils.StatusProduct
+import kotlinx.coroutines.Job
 import javax.inject.Singleton
 
 
@@ -19,7 +29,7 @@ import javax.inject.Singleton
 class CategoriesAdapter internal constructor(
     private val context: Context,
     private var titleList: MutableList<String>,
-    private var dataList: MutableMap<String, MutableList<Product>>,private val lifecycleOwner: LifecycleOwner
+    private var dataList: MutableMap<String, MutableList<Product>>,private val lifecycleOwner: LifecycleOwner,private val updateProduct:(MutableLiveData<ResponseUpdateProduct>,String,String,RequestUpdateProduct)-> Job
 ) : BaseExpandableListAdapter() {
 
     override fun getChild(listPosition: Int, expandedListPosition: Int): Any {
@@ -45,10 +55,31 @@ class CategoriesAdapter internal constructor(
             false
         )
 
-        val product = getChild(listPosition, expandedListPosition) as Product
+        var product = getChild(listPosition, expandedListPosition) as Product
         binding.product=product
         binding.lifecycleOwner=lifecycleOwner
         Glide.with(context).load(product.imageUrl).into(binding.imageProduct)
+
+        val token = UserPreferences.getInstance(context).getValue(UserPreferences.DataType.TOKEN) as String
+        binding.status.setOnClickListener {
+            Log.d("Info","Se hizp click")
+
+            val statusProduct = if(binding.status.text == "AVAILABLE"){
+                StatusProduct.UNAVAILABLE
+            }else{
+                StatusProduct.AVAILABLE
+            }
+
+            var response= MutableLiveData<ResponseUpdateProduct>()
+
+           updateProduct(response,token,product.uuid,RequestUpdateProduct(statusProduct.name))
+
+            response.observe(lifecycleOwner, Observer {
+                Log.d("Info","Se actualizo yeihhh $it")
+                product=it.result
+            })
+
+        }
 
         return binding.root
 

@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity(), OnUpdateDataListener {
         token = UserPreferences.getInstance(this).getValue(UserPreferences.DataType.TOKEN) as String
         mainActivityViewModel.getStores(token)
 
-        expandableListAdapter= CategoriesAdapter(this, listStores, listProducts,this)
+        expandableListAdapter= CategoriesAdapter(this, listStores, listProducts,this,mainActivityViewModel.update)
         mainActivityViewModel.setListener(this)
         binding.categoriesRv.setAdapter(expandableListAdapter)
         binding.data=mainActivityViewModel

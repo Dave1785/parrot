@@ -1,5 +1,7 @@
 package com.examen.parrot.stores.data
 
+import com.examen.parrot.stores.domain.RequestUpdateProduct
+import com.examen.parrot.stores.domain.ResponseUpdateProduct
 import com.examen.parrot.stores.framework.ProductDao
 import com.examen.parrot.stores.framework.StoreDao
 import com.examen.parrot.stores.source.StoreRemoteSource
@@ -27,6 +29,10 @@ class StoreRepository @Inject constructor(
         saveCallResult = {productDao.insertAll(it)}
 
     )
+
+    suspend fun updateProduct(token: String,productId:String,requestUpdateProduct: RequestUpdateProduct):ResponseUpdateProduct?{
+       return storeSource.updateProductStatus(token,productId,requestUpdateProduct).data
+    }
 
 
 }
