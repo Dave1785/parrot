@@ -36,6 +36,10 @@ class MainActivityViewModel @ViewModelInject constructor(private val stores: Get
     val productsList: LiveData<List<Product>>
         get() = _productsList
 
+    private var _productUpdate=MutableLiveData<ResponseUpdateProduct>()
+    val productUpdate: LiveData<ResponseUpdateProduct>
+        get() = _productUpdate
+
     fun setListener(OnUpdateDataListener: OnUpdateDataListener) {
         stores.setListener(OnUpdateDataListener)
     }
@@ -58,8 +62,10 @@ class MainActivityViewModel @ViewModelInject constructor(private val stores: Get
     var update={
             data:MutableLiveData<ResponseUpdateProduct>,token: String, productId:String, requestUpdateProduct: RequestUpdateProduct->
         viewModelScope.launch {
+            showLoading(true)
             withContext(Dispatchers.Main){
                data.value= stores.updateProduct("Bearer $token",productId,requestUpdateProduct)
+                _productUpdate.value=data.value
             }
         }
     }

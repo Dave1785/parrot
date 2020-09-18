@@ -75,10 +75,13 @@ class MainActivity : AppCompatActivity(), OnUpdateDataListener {
             mainActivityViewModel.showLoading(false)
 
             listProducts[currentStore] = it.toMutableList()
-            //mainActivityViewModel.updateProducts(currentStore,it)
             expandableListAdapter.updateChildList(listStores, listProducts )
 
             Toast.makeText(this,"Se actualizaron productos",Toast.LENGTH_LONG).show()
+        })
+
+        mainActivityViewModel.productUpdate.observe(this, Observer {
+            mainActivityViewModel.showLoading(false)
         })
 
     }
