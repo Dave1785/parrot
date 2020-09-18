@@ -17,6 +17,7 @@
         android:usesCleartextTraffic="true">
         <activity
             android:name=".splash.ui.SplashActivity"
+            android:theme="@style/Theme.Design.NoActionBar"
             android:label="">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

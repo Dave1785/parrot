@@ -13,9 +13,4 @@ object BindingAdapters {
         view.visibility = if (value) View.VISIBLE else View.GONE
     }
 
-    @BindingAdapter("android:setName")
-    @JvmStatic
-    fun setNameText(button: Button, name:String){
-        button.text = "Hola $name"
-    }
 }
