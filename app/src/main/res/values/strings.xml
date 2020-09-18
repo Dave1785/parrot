@@ -15,4 +15,6 @@
     <string name="user_hint">Usuario</string>
     <string name="password_hint">Contraseña</string>
 
+    <string name="name_app">CustomName</string>
+
 </resources>
