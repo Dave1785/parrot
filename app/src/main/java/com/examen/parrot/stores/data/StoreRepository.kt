@@ -18,7 +18,7 @@ class StoreRepository @Inject constructor(
 
     suspend fun getStores(token: String) = performGetOperation(
         databaseQuery = { storeDao.getAllStores() },
-        networkCall = { storeSource.getStoresAsync(token) },
+        networkCall = {storeSource.getStoresAsync(token)},
         saveCallResult = { storeDao.insertAll(it) }
     )
 

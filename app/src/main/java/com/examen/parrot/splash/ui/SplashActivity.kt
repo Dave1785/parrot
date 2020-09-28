@@ -50,10 +50,19 @@ class SplashActivity :AppCompatActivity(){
 
                 }
             }else{
-                Toast.makeText(this,"Tu token se caduco inicia sesión nuevamente",Toast.LENGTH_LONG).show()
-                Timer("SettingUp", false).schedule(5000) {
-                    startActivity(Intent(this@SplashActivity,LoginActivity::class.java))
-                    finish()
+                if(token.isNullOrEmpty()){
+
+                    Toast.makeText(this,"Tu token se caduco inicia sesión nuevamente",Toast.LENGTH_LONG).show()
+                    Timer("SettingUp", false).schedule(5000) {
+                        startActivity(Intent(this@SplashActivity,LoginActivity::class.java))
+                        finish()
+                    }
+                }else{
+                    Timer("SettingUp", false).schedule(5000) {
+                        startActivity(Intent(this@SplashActivity,MainActivity::class.java))
+                        finish()
+                    }
+
                 }
             }
 
